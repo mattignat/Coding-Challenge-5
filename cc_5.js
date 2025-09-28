@@ -122,3 +122,147 @@ employees.forEach(employee => {
     }
 });
 
+// Step 5: Write calculateTaxes(grossPay) that deducts 15% tax
+/**
+ * Calculates tax deduction at 15% rate
+ * @param {number} grossPay - The gross pay before taxes
+ * @returns {number} - The tax amount to be deducted
+ */
+function calculateTaxes(grossPay) {
+    const taxRate = 0.15; // 15% tax rate
+    return grossPay * taxRate;
+}
+
+// Test the calculateTaxes function
+console.log("\n" + "=".repeat(50));
+console.log("TESTING calculateTaxes() FUNCTION");
+console.log("=".repeat(50));
+
+// Test with different gross pay amounts
+console.log("Test 1 - $1000 gross pay:");
+const grossPay1 = 1000;
+const taxes1 = calculateTaxes(grossPay1);
+console.log(`Gross Pay: $${grossPay1.toFixed(2)}`);
+console.log(`Taxes (15%): $${taxes1.toFixed(2)}`);
+console.log(`Net Pay: $${(grossPay1 - taxes1).toFixed(2)}`);
+
+console.log("\nTest 2 - $1500 gross pay:");
+const grossPay2 = 1500;
+const taxes2 = calculateTaxes(grossPay2);
+console.log(`Gross Pay: $${grossPay2.toFixed(2)}`);
+console.log(`Taxes (15%): $${taxes2.toFixed(2)}`);
+console.log(`Net Pay: $${(grossPay2 - taxes2).toFixed(2)}`);
+
+console.log("\nTest 3 - Testing with employee gross pay calculations:");
+employees.forEach(employee => {
+    const basePay = calculateBasePay(employee.hourlyRate, employee.hoursWorked);
+    const overtimePay = calculateOvertimePay(employee.hourlyRate, employee.hoursWorked);
+    const grossPay = basePay + overtimePay;
+    const taxes = calculateTaxes(grossPay);
+    const netPay = grossPay - taxes;
+    
+    console.log(`${employee.name}:`);
+    console.log(`  Base Pay: $${basePay.toFixed(2)}`);
+    console.log(`  Overtime Pay: $${overtimePay.toFixed(2)}`);
+    console.log(`  Gross Pay: $${grossPay.toFixed(2)}`);
+    console.log(`  Taxes (15%): $${taxes.toFixed(2)}`);
+    console.log(`  Net Pay: $${netPay.toFixed(2)}`);
+    console.log("");
+});
+
+// Step 6: Write processPayroll(employee) that returns an object with all payroll details
+/**
+ * Processes complete payroll for an employee using all modular functions
+ * @param {object} employee - Employee object with name, hourlyRate, and hoursWorked
+ * @returns {object} - Complete payroll object with all pay calculations
+ */
+function processPayroll(employee) {
+    const basePay = calculateBasePay(employee.hourlyRate, employee.hoursWorked);
+    const overtimePay = calculateOvertimePay(employee.hourlyRate, employee.hoursWorked);
+    const grossPay = basePay + overtimePay;
+    const taxes = calculateTaxes(grossPay);
+    const netPay = grossPay - taxes;
+    
+    return {
+        name: employee.name,
+        basePay: basePay,
+        overtimePay: overtimePay,
+        grossPay: grossPay,
+        netPay: netPay
+    };
+}
+
+// Test the processPayroll function
+console.log("\n" + "=".repeat(50));
+console.log("TESTING processPayroll() FUNCTION");
+console.log("=".repeat(50));
+
+// Test with individual employee
+console.log("Test 1 - Single employee payroll:");
+const sampleEmployee = employees[0]; // Sarah Johnson
+const payrollResult = processPayroll(sampleEmployee);
+console.log("Employee:", sampleEmployee.name);
+console.log("Input:", `$${sampleEmployee.hourlyRate}/hr, ${sampleEmployee.hoursWorked} hours`);
+console.log("Payroll Result:", payrollResult);
+
+// Test with all employees using the processPayroll function
+console.log("\nTest 2 - Complete payroll processing for all employees:");
+console.log("Using processPayroll() function (modular approach):");
+console.log("-".repeat(50));
+
+employees.forEach(employee => {
+    const payroll = processPayroll(employee); // Using the modular function
+    
+    console.log(`${payroll.name}:`);
+    console.log(`  Base Pay: $${payroll.basePay.toFixed(2)}`);
+    console.log(`  Overtime Pay: $${payroll.overtimePay.toFixed(2)}`);
+    console.log(`  Gross Pay: $${payroll.grossPay.toFixed(2)}`);
+    console.log(`  Net Pay: $${payroll.netPay.toFixed(2)}`);
+    console.log("");
+});
+
+// Test 3 - Create payroll summary using processPayroll
+console.log("Test 3 - Payroll summary using processPayroll function:");
+const payrollSummary = employees.map(processPayroll); // Using function instead of repeating logic
+console.log("Payroll Summary Array:", payrollSummary);
+
+console.log("\nPayroll totals:");
+const totalGrossPay = payrollSummary.reduce((sum, payroll) => sum + payroll.grossPay, 0);
+const totalNetPay = payrollSummary.reduce((sum, payroll) => sum + payroll.netPay, 0);
+const totalTaxes = totalGrossPay - totalNetPay;
+
+console.log(`Total Gross Pay: $${totalGrossPay.toFixed(2)}`);
+console.log(`Total Taxes: $${totalTaxes.toFixed(2)}`);
+console.log(`Total Net Pay: $${totalNetPay.toFixed(2)}`);
+
+// Step 7: Loop through your employee array and log the payroll object for each employee
+console.log("\n" + "=".repeat(50));
+console.log("STEP 7: EMPLOYEE PAYROLL PROCESSING");
+console.log("=".repeat(50));
+
+console.log("Processing payroll for each employee using processPayroll() function:");
+console.log("-".repeat(50));
+
+// Loop through employees and log payroll object for each
+employees.forEach((employee, index) => {
+    console.log(`Employee ${index + 1}:`);
+    
+    // Use the processPayroll function (modular approach - no repeated logic)
+    const payrollObject = processPayroll(employee);
+    
+    // Log the complete payroll object
+    console.log(payrollObject);
+    
+    // Also log in a more readable format
+    console.log("Formatted Details:");
+    console.log(`  Name: ${payrollObject.name}`);
+    console.log(`  Base Pay: $${payrollObject.basePay.toFixed(2)}`);
+    console.log(`  Overtime Pay: $${payrollObject.overtimePay.toFixed(2)}`);
+    console.log(`  Gross Pay: $${payrollObject.grossPay.toFixed(2)}`);
+    console.log(`  Net Pay: $${payrollObject.netPay.toFixed(2)}`);
+    console.log("");
+});
+
+console.log("✅ Payroll processing complete for all employees!");
+console.log("✅ All functions used modularly - no logic repeated in loops!");
+
