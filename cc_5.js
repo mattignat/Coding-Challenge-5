@@ -75,3 +75,50 @@ employees.forEach(employee => {
     console.log(`${employee.name}: $${basePay.toFixed(2)} (${Math.min(employee.hoursWorked, 40)} base hours)`);
 });
 
+// Step 4: Write calculateOvertimePay(rate, hours) that returns 1.5x rate for hours over 40
+/**
+ * Calculates overtime pay at 1.5x rate for hours worked over 40
+ * @param {number} rate - The hourly rate
+ * @param {number} hours - The total hours worked
+ * @returns {number} - The overtime pay (1.5x rate for hours over 40)
+ */
+function calculateOvertimePay(rate, hours) {
+    if (hours <= 40) {
+        return 0; // No overtime if 40 hours or less
+    }
+    const overtimeHours = hours - 40;
+    const overtimeRate = rate * 1.5;
+    return overtimeRate * overtimeHours;
+}
+
+// Test the calculateOvertimePay function
+console.log("\n" + "=".repeat(50));
+console.log("TESTING calculateOvertimePay() FUNCTION");
+console.log("=".repeat(50));
+
+// Test with different scenarios
+console.log("Test 1 - No overtime (35 hours):");
+console.log("calculateOvertimePay(25, 35):", calculateOvertimePay(25, 35)); // Expected: 0
+
+console.log("\nTest 2 - Exactly 40 hours:");
+console.log("calculateOvertimePay(30, 40):", calculateOvertimePay(30, 40)); // Expected: 0
+
+console.log("\nTest 3 - 5 hours overtime:");
+console.log("calculateOvertimePay(25, 45):", calculateOvertimePay(25, 45)); // Expected: 187.5 (5 hours * $37.50)
+
+console.log("\nTest 4 - 10 hours overtime:");
+console.log("calculateOvertimePay(20, 50):", calculateOvertimePay(20, 50)); // Expected: 300 (10 hours * $30)
+
+console.log("\nTest 5 - Testing with employee data:");
+employees.forEach(employee => {
+    const overtimePay = calculateOvertimePay(employee.hourlyRate, employee.hoursWorked);
+    const overtimeHours = Math.max(0, employee.hoursWorked - 40);
+    const overtimeRate = employee.hourlyRate * 1.5;
+    
+    if (overtimePay > 0) {
+        console.log(`${employee.name}: $${overtimePay.toFixed(2)} (${overtimeHours} overtime hours @ $${overtimeRate.toFixed(2)}/hr)`);
+    } else {
+        console.log(`${employee.name}: $0.00 (no overtime)`);
+    }
+});
+
